@@ -16,7 +16,27 @@
   a{color:var(--link)}
   .container{max-width:980px; margin:24px auto; padding:0 16px}
   header{margin-bottom:10px}
-  h1{font-size:clamp(22px,3vw,30px); margin:0 0 4px; color:var(--link)}
+  
+  /* --- MODIFIED H1 and ADDED LOGO STYLE --- */
+  h1{
+    margin:0 0 4px; 
+    color:var(--link);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    font-size: 2.0rem; /* Match previous request */
+  }
+  .header-logo {
+    height: 120px;
+    width: 120px;
+    margin-right: 20px;
+    border-radius: 50%;
+    border: none;
+    flex-shrink: 0;
+  }
+  /* --- END OF MODIFICATIONS --- */
+
   .muted{color:var(--muted)}
 
   /* One-row toolbar (wraps on small screens) */
@@ -89,13 +109,15 @@
 <body>
   <div class="container">
     <header>
-      <h1>ICT Lesson Planner</h1>
+      <h1>
+        <img src="pdhub-logo.png" alt="PD Hub Logo" class="header-logo">
+        ICT Lesson Planner
+      </h1>
       <div class="muted tiny">
         <strong>Gross time:</strong> 45′ · <strong>Net teaching time:</strong> 35–40′ (after settling, transitions, admin).  
         Keep tech to what helps. Aim for about <strong>20–40%</strong> of class time with devices.
       </div>
 
-      <!-- Toolbar -->
       <div class="bar" role="toolbar" aria-label="Actions">
         <select id="planSelect" class="select" aria-label="Choose preset">
           <option value="">— Select —</option>
@@ -109,7 +131,6 @@
       </div>
     </header>
 
-    <!-- Help/Gauge card: hidden on print -->
     <section class="card print-hide">
       <details>
         <summary>What does “just enough” mean? The Goldilocks Tech Rule</summary>
@@ -128,7 +149,6 @@
       <div class="tiny muted">Green (good) ≈ 20–40%. The gauge updates when you add minutes and tick “Devices?”.</div>
     </section>
 
-    <!-- META: kept in print -->
     <section class="card">
       <div class="grid grid-3">
         <div>
@@ -156,7 +176,6 @@
       </div>
     </section>
 
-    <!-- STEPS: kept in print -->
     <section class="card">
       <h2 style="margin:0 0 6px">Steps (each with a paper Plan B)</h2>
       <table id="tbl">
@@ -183,7 +202,6 @@
       </div>
     </section>
 
-    <!-- QUICK CHECKS: hidden on print -->
     <section class="card print-hide">
       <h2 style="margin:0 0 6px">Quick checks</h2>
       <div class="checklist tiny">
@@ -336,7 +354,7 @@
          how:'Google Form', links:['https://forms.gle/jbhRq7ji5YyGQG8N7'],
          plan:'Teacher reads aloud; students answer orally; teacher notes answers.'},
         {step:'Guided practice', min:6, tech:true, do:'Do a 7-item cloze to recycle descriptors (hair, eyes, smile, slim, etc.).',
-         how:'Wordwall Cloze', links:['https://wordwall.net/resource/101027703'],
+         how:'Wordwall Cloze', links:['httpsD://wordwall.net/resource/101027703'],
          plan:'Printed cloze; pair check; project answers.'},
         {step:'Plan outline', min:13, tech:false, do:'Describing a Person — 3 Writing Tips Handout',
          how:'Project the Handout', links:['https://domvrosepimorfosi.github.io/writinghandout-b1/'],
