@@ -105,50 +105,32 @@
     .container{max-width:100%; padding:0 8px}
   }
 
-  /* --- Exit Ticket modal styles --- */
-  .modal-backdrop{
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+  /* --- Exit Ticket modal (minimal, non-invasive) --- */
+  .exit-modal-backdrop{
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    display: none; align-items: center; justify-content: center; padding: 24px;
     z-index: 9999;
   }
-  .modal-backdrop.open{ display:flex; }
-  .modal-panel{
-    position: relative;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 12px 40px rgba(0,0,0,.45);
-    max-width: 960px;
-    max-height: 92vh;
-    overflow: hidden;
+  .exit-modal-backdrop.open{ display:flex; }
+  .exit-modal-panel{
+    position: relative; background:#fff; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,.45);
+    max-width: 96vw; max-height: 92vh; overflow:auto;
   }
-  .modal-panel img{
+  .exit-modal-panel img{ display:block; max-width:100%; height:auto }
+  .exit-modal-close{
+    position:absolute; top:8px; right:8px; width:36px; height:36px; line-height:32px;
+    border-radius:999px; border:2px solid var(--link); background:#fff; color:var(--link);
+    font-weight:800; text-align:center; cursor:pointer;
+  }
+  @media print{ .exit-modal-backdrop{ display:none !important; } }
+
+
+  /* Exit Ticket: show image at half size */
+  .exit-modal-panel img{
+    max-width: 50% !important;
+    height: auto !important;
     display: block;
-    max-width: 100%;
-    height: auto;
-  }
-  .modal-close{
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #fff;
-    border: 2px solid var(--link);
-    color: var(--link);
-    border-radius: 999px;
-    width: 32px;
-    height: 32px;
-    line-height: 28px;
-    text-align: center;
-    font-weight: 800;
-    cursor: pointer;
-  }
-  .modal-backdrop[aria-hidden="true"]{ display:none; }
-  @media print{
-    #exitTicketCard, .modal-backdrop{ display:none !important; }
+    margin: 0 auto;
   }
 
 </style>
@@ -260,23 +242,7 @@
       </div>
     </section>
 
-    
-    <!-- Exit Ticket section with popup preview button -->
-    <section id="exitTicketCard" class="card print-hide">
-      <h2 style="margin:0 0 8px">Exit Ticket</h2>
-      <p class="tiny muted" style="margin-top:0">Quickly project the ready-made exit ticket or let students view it on a tablet. Click the button to preview.</p>
-      <button id="showExitBtn" type="button" class="btn" aria-haspopup="dialog" aria-controls="exitTicketModal">Show “Exit Ticket 1”</button>
-    </section>
-
-    <!-- Modal for Exit Ticket image -->
-    <div id="exitTicketModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="exitTicketTitle">
-      <div class="modal-panel">
-        <button class="modal-close" aria-label="Close">×</button>
-        <img id="exitTicketImg" src="" alt="Exit Ticket 1 – Describing a Person">
-      </div>
-    </div>
-
-<p class="tiny muted print-hide">You can copy, adapt, and share this template with your classmates.</p>
+    <p class="tiny muted print-hide">You can copy, adapt, and share this template with your classmates.</p>
 
     <footer class="print-hide">
       ✨✍️ Created by Panagiotis Domvros, English and Drama Teacher, All Rights Reserved ✍️✨
@@ -485,41 +451,91 @@
     if(!key){ status('Choose a preset first.'); return; }
     loadPlan(key);
   });
-}
-  /* ---- Exit Ticket modal wiring ---- */
-  const etBtn   = document.getElementById('showExitBtn');
-  const etModal = document.getElementById('exitTicketModal');
-  const etImg   = document.getElementById('exitTicketImg');
-  const etClose = etModal ? etModal.querySelector('.modal-close') : null;
-
-  function openExitModal(){
-    if(!etModal) return;
-    etImg.setAttribute('src', 'Exit%20Ticket%201.png');
-    etModal.removeAttribute('aria-hidden');
-    etModal.classList.add('open');
-    if(etClose) etClose.focus();
-  }
-  function closeExitModal(){
-    if(!etModal) return;
-    etModal.classList.remove('open');
-    etModal.setAttribute('aria-hidden','true');
-    // keep image cached; do not clear src for faster reopen
-  }
-
-  if (etBtn && etModal){
-    etBtn.addEventListener('click', open);
-    // ensure correct binding even if function name 'open' conflicts
-    etBtn.removeEventListener('click', open); // no-op if not present
-    etBtn.addEventListener('click', openExitModal);
-    etModal.addEventListener('click', (e)=>{
-      if (e.target === etModal) { closeExitModal(); }
-    });
-    if (etClose){ etClose.addEventListener('click', closeExitModal); }
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === 'Escape') { closeExitModal(); }
-    });
-  }
-
 })();
 </script>
+
+<script>
+/* Exit Ticket injector (lazy lookup, non-invasive) */
+(function(){
+  function getModal(){ return document.getElementById('exitTicketModal'); }
+  function getModalImg(){ return document.getElementById('exitTicketImg'); }
+  function getCloseBtn(){ const m=getModal(); return m ? m.querySelector('.exit-modal-close') : null; }
+
+  function openExitTicket(){
+    const modal = getModal();
+    const img = getModalImg();
+    if(!modal) return;
+    if(img){ img.src = 'Exit%20Ticket%201.png'; }
+    modal.classList.add('open');
+    modal.removeAttribute('aria-hidden');
+    const closeBtn = getCloseBtn();
+    if(closeBtn) closeBtn.focus();
+  }
+  function closeExitTicket(){
+    const modal = getModal();
+    if(!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+  }
+  // Close wiring (rebound on DOM changes)
+  function wireModalClose(){
+    const modal = getModal();
+    const closeBtn = getCloseBtn();
+    if(modal){
+      modal.addEventListener('click', (e)=>{ if(e.target === modal) closeExitTicket(); });
+    }
+    if(closeBtn){ closeBtn.addEventListener('click', closeExitTicket); }
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeExitTicket(); });
+  }
+
+  function injectExitButtonIntoRow(tr){
+    if(!tr) return;
+    const stepEl = tr.querySelector('.r-step');
+    if(!stepEl) return;
+    const step = (stepEl.value || '').trim().toLowerCase();
+    if(step !== 'exit ticket') return;
+
+    const linksBox = tr.querySelector('.how-links');
+    if(!linksBox) return;
+
+    if(linksBox.querySelector('.open-exit-ticket')) return; // already added
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn open-exit-ticket';
+    btn.style.marginTop = '6px';
+    btn.textContent = 'Open “Exit Ticket”';
+    btn.addEventListener('click', openExitTicket);
+    linksBox.prepend(btn);
+  }
+
+  function scanAllRows(){
+    document.querySelectorAll('#tbl tbody tr').forEach(injectExitButtonIntoRow);
+    wireModalClose();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', scanAllRows);
+  }else{
+    scanAllRows();
+  }
+
+  const tbody = document.querySelector('#tbl tbody');
+  if(tbody && 'MutationObserver' in window){
+    const mo = new MutationObserver(scanAllRows);
+    mo.observe(tbody, { childList:true, subtree:true });
+  }
+})();
+</script>
+
+
+
+  <!-- Exit Ticket pop-up -->
+  <div id="exitTicketModal" class="exit-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="exit-modal-panel">
+      <button type="button" class="exit-modal-close" aria-label="Close">×</button>
+      <img id="exitTicketImg" src="" alt="Exit Ticket 1">
+    </div>
+  </div>
+
 </body></html>
