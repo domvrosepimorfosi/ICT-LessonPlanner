@@ -104,6 +104,53 @@
     .how-links a::after{ content:" (" attr(href) ")"; font-size:11px; }
     .container{max-width:100%; padding:0 8px}
   }
+
+  /* --- Exit Ticket modal styles --- */
+  .modal-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 9999;
+  }
+  .modal-backdrop.open{ display:flex; }
+  .modal-panel{
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    max-width: 960px;
+    max-height: 92vh;
+    overflow: hidden;
+  }
+  .modal-panel img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .modal-close{
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #fff;
+    border: 2px solid var(--link);
+    color: var(--link);
+    border-radius: 999px;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    text-align: center;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .modal-backdrop[aria-hidden="true"]{ display:none; }
+  @media print{
+    #exitTicketCard, .modal-backdrop{ display:none !important; }
+  }
+
 </style>
 </head>
 <body>
@@ -213,7 +260,23 @@
       </div>
     </section>
 
-    <p class="tiny muted print-hide">You can copy, adapt, and share this template with your classmates.</p>
+    
+    <!-- Exit Ticket section with popup preview button -->
+    <section id="exitTicketCard" class="card print-hide">
+      <h2 style="margin:0 0 8px">Exit Ticket</h2>
+      <p class="tiny muted" style="margin-top:0">Quickly project the ready-made exit ticket or let students view it on a tablet. Click the button to preview.</p>
+      <button id="showExitBtn" type="button" class="btn" aria-haspopup="dialog" aria-controls="exitTicketModal">Show “Exit Ticket 1”</button>
+    </section>
+
+    <!-- Modal for Exit Ticket image -->
+    <div id="exitTicketModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="exitTicketTitle">
+      <div class="modal-panel">
+        <button class="modal-close" aria-label="Close">×</button>
+        <img id="exitTicketImg" src="" alt="Exit Ticket 1 – Describing a Person">
+      </div>
+    </div>
+
+<p class="tiny muted print-hide">You can copy, adapt, and share this template with your classmates.</p>
 
     <footer class="print-hide">
       ✨✍️ Created by Panagiotis Domvros, English and Drama Teacher, All Rights Reserved ✍️✨
@@ -422,6 +485,41 @@
     if(!key){ status('Choose a preset first.'); return; }
     loadPlan(key);
   });
+}
+  /* ---- Exit Ticket modal wiring ---- */
+  const etBtn   = document.getElementById('showExitBtn');
+  const etModal = document.getElementById('exitTicketModal');
+  const etImg   = document.getElementById('exitTicketImg');
+  const etClose = etModal ? etModal.querySelector('.modal-close') : null;
+
+  function openExitModal(){
+    if(!etModal) return;
+    etImg.setAttribute('src', 'Exit%20Ticket%201.png');
+    etModal.removeAttribute('aria-hidden');
+    etModal.classList.add('open');
+    if(etClose) etClose.focus();
+  }
+  function closeExitModal(){
+    if(!etModal) return;
+    etModal.classList.remove('open');
+    etModal.setAttribute('aria-hidden','true');
+    // keep image cached; do not clear src for faster reopen
+  }
+
+  if (etBtn && etModal){
+    etBtn.addEventListener('click', open);
+    // ensure correct binding even if function name 'open' conflicts
+    etBtn.removeEventListener('click', open); // no-op if not present
+    etBtn.addEventListener('click', openExitModal);
+    etModal.addEventListener('click', (e)=>{
+      if (e.target === etModal) { closeExitModal(); }
+    });
+    if (etClose){ etClose.addEventListener('click', closeExitModal); }
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape') { closeExitModal(); }
+    });
+  }
+
 })();
 </script>
 </body></html>
