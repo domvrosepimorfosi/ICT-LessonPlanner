@@ -1,541 +1,454 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ICT Lesson Planner</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Bridging the Digital Divide - Teacher Empowerment and the future of the English Teacher in the age of AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <style>
+  /* Palette 4 — Union Jack (fixed light theme) */
   :root{
-    --bg:#f8fafc;       /* light background */
-    --text:#111827;     /* body text */
-    --muted:#475569;    /* helper text */
-    --card:#ffffff;     /* white */
-    --border:#e2e8f0;   /* slate-200 */
-    --link:#00247d;     /* UK blue */
+    --paper:#FFFDF7;     /* page background */
+    --surface:#FFFFFF;   /* cards/panels - White */
+    --ink:#1F2937;       /* primary text - Dark Grey */
+    --muted:#6B7280;     /* secondary text */
+    --border:#E7E5E4;    /* light borders */
+    --accent:#C8102E;    /* primary accent (Red) */
+    --blue:#012169;      /* Union Jack Blue */
+    --red:#C8102E;       /* Union Jack Red */
+    --amber:#F59E0B; --violet:#7C3AED; --rose:#E11D48; --teal:#0D9488; --indigo:#4F46E5;
   }
   *{box-sizing:border-box}
-  body{margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial}
-  a{color:var(--link)}
-  .container{max-width:980px; margin:24px auto; padding:0 16px}
-  header{margin-bottom:10px}
-  
-  /* --- MODIFIED H1 and ADDED LOGO STYLE --- */
-  h1{
-    margin:0 0 4px; 
-    color:var(--link);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: left;
-    font-size: 2.0rem; /* Match previous request */
+  html,body{height:100%}
+  body{
+    margin:0;
+    background: var(--paper);
+    background-image: linear-gradient(135deg, rgba(1,33,105,.05), rgba(255,253,247,0) 35%, rgba(200,16,46,.05) 100%);
+    background-attachment: fixed;
+    color:var(--ink);
+    font-family:'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+    line-height:1.5
   }
-  .header-logo {
-    height: 120px;
-    width: 120px;
-    margin-right: 20px;
-    border-radius: 50%;
-    border: none;
-    flex-shrink: 0;
-  }
-  /* --- END OF MODIFICATIONS --- */
+  a{color:var(--blue);text-decoration:none}
+  a:hover{color:var(--red);text-decoration:underline}
 
+  /* Header */
+  header{
+    position:static;
+    z-index:auto;
+    background:
+      linear-gradient(90deg, rgba(1,33,105,.06), rgba(255,255,255,0) 50%, rgba(200,16,46,.06)),
+      linear-gradient(180deg,rgba(255,253,247,.95),rgba(255,253,247,.82));
+    border-bottom:3px solid var(--blue)
+  }
+  .bar{
+    max-width:1200px;
+    margin:0 auto;
+    padding:14px 12px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    align-items:center
+  }
+  .title{font-weight:800;font-size:clamp(20px,2.6vw,30px)}
+  .subtitle{color:var(--muted);font-size:14px}
+
+  /* Tabs (top tabs) */
+  .tabs{
+    max-width:1200px;
+    margin:16px auto 0;
+    padding:0 12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center
+  }
+  .tab{
+    appearance:none;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--ink);
+    padding:8px 12px;              /* compact padding */
+    border-radius:999px;
+    font-weight:700;
+    font-size:13px;                 /* slightly smaller font to fit more tabs per row */
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    height:40px;
+    line-height:1;
+    box-shadow:none;
+    outline:none;
+    vertical-align:middle
+  }
+  .tab:focus,.tab:focus-visible,.tab:active{outline:none;box-shadow:none}
+
+  /* Tab selected colors using Union Jack palette */
+  .tab[aria-selected="true"]{border-color:var(--accent);background:rgba(200,16,46,.15)} /* Red accent background */
+  .tab[aria-selected="true"][data-color="home"]{border-color:#9CA3AF;background:rgba(156,163,175,.12)}
+  .tab[aria-selected="true"][data-color="c1"]{border-color:var(--blue);background:rgba(1,33,105,.15)} /* Blue accent */
+  .tab[aria-selected="true"][data-color="c2"]{border-color:var(--red);background:rgba(200,16,46,.15)} /* Red accent */
+  .tab[aria-selected="true"][data-color="c3"]{border-color:var(--violet);background:rgba(124,58,237,.14)}
+  .tab[aria-selected="true"][data-color="c4"]{border-color:var(--rose);background:rgba(225,29,72,.12)}
+  .tab[aria-selected="true"][data-color="c5"]{border-color:var(--teal);background:rgba(13,148,136,.12)}
+  .tab[aria-selected="true"][data-color="c6"]{border-color:var(--indigo);background:rgba(79,70,229,.14)}
+  .tab[data-color="home"][aria-selected="true"]{outline-color:#9CA3AF}
+  .tab[data-color="c1"][aria-selected="true"]{outline-color:var(--blue)}
+  .tab[data-color="c2"][aria-selected="true"]{outline-color:var(--red)} /* Red accent */
+  .tab[data-color="c3"][aria-selected="true"]{outline-color:var(--violet)}
+  .tab[data-color="c4"][aria-selected="true"]{outline-color:var(--rose)}
+  .tab[data-color="c5"][aria-selected="true"]{outline-color:var(--teal)}
+  .tab[data-color="c6"][aria-selected="true"]{outline-color:var(--indigo)}
+
+  /* Panels */
+  main{max-width:1200px;margin:10px auto 0;padding:0 12px 160px}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  /* Home panel cards */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+  details.card summary {list-style: none; cursor: pointer;}
+  details.card summary::-webkit-details-marker {display: none;}
+  .cta{color:var(--blue);text-decoration:none}
+  a:hover{color:var(--red);text-decoration:underline}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
   .muted{color:var(--muted)}
-
-  /* One-row toolbar (wraps on small screens) */
-  .bar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px}
-  .btn{
-    background:#fff; border:2px solid var(--link); color:var(--link);
-    border-radius:10px; padding:8px 14px; font-weight:700; line-height:1; height:40px; cursor:pointer;
-  }
-  .select{
-    height:40px; border:2px solid var(--link); border-radius:10px; padding:0 10px; font-weight:600; background:#fff;
-  }
-  .status{font-size:12px; color:#7c8696}
-
-  .card{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin:12px 0}
-  .print-hide{} /* utility class we'll hide in print */
-
-  label{font-weight:700; display:block; margin-bottom:6px}
-  input[type="text"], input[type="number"], textarea{width:100%; border:1px solid var(--border); border-radius:10px; padding:8px 10px; background:#fff}
-  textarea{min-height:44px; resize:none; overflow:hidden} /* auto-grow (JS) */
-
-  .grid{display:grid; gap:10px}
-  .grid-2{grid-template-columns: 1fr 1fr}
-  .grid-3{grid-template-columns: repeat(3,1fr)}
-  @media (max-width: 820px){.grid-2,.grid-3{grid-template-columns: 1fr}}
-
-  table{width:100%; border-collapse:collapse; table-layout:fixed}
-  th,td{border:1px solid var(--border); padding:8px; vertical-align:top; word-wrap:break-word}
-  th{background:#f1f5f9; text-align:left; border-top:2px solid var(--link)}
-  .tiny{font-size:13px}
-
-  /* Narrower columns */
-  th.col-min, td.col-min{width:6ch}
-  td.col-min input{width:6ch; text-align:center}
-  th.col-dev{width:8ch} /* "Devices?" shorter */
-
-  /* Gauge (original colours preserved) */
-  .meter{height:12px; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:#fff}
-  .fill{height:100%; width:0; background:linear-gradient(90deg, #ef4444, #f59e0b, #16a34a);}
-  .pill{display:inline-block; padding:2px 8px; border:1px solid var(--border); border-radius:999px; font-size:12px}
-  .ok{background:#dcfce7; border-color:#86efac}
-  .low{background:#fff7ed; border-color:#fcd34d}
-  .high{background:#fee2e2; border-color:#fecaca}
-
-  details{border:1px dashed var(--border); border-radius:10px; padding:8px 10px; background:#fff}
-  details summary{cursor:pointer; font-weight:700; color:var(--link)}
-
-  .checklist{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px}
-  @media (max-width:640px){.checklist{grid-template-columns:1fr}}
-
-  /* Clickable link preview under HOW field */
-  .how-links{margin-top:6px}
-  .how-links a{color:var(--link); text-decoration:underline; word-break:break-all; font-size:13px}
-
-  footer{margin:18px 0 8px; text-align:center; font-size:12px; color:#0f172a}
-
-  /* ===== PRINT: only meta + steps; clean look ===== */
-  @media print{
-    header .bar, footer, .print-hide, .status, .tiny.muted{ display:none !important; }
-    th{ background:#ffffff !important; border-color:#999 !important; }
-    td{ border-color:#999 !important; }
-    input[type="text"], input[type="number"], textarea{
-      border:0 !important; padding:0 !important; background:transparent !important;
-    }
-    input[type="checkbox"]{ display:none !important; }
-    .how-links a::after{ content:" (" attr(href) ")"; font-size:11px; }
-    .container{max-width:100%; padding:0 8px}
-  }
-
-  /* --- Exit Ticket modal (minimal, non-invasive) --- */
-  .exit-modal-backdrop{
-    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-    display: none; align-items: center; justify-content: center; padding: 24px;
-    z-index: 9999;
-  }
-  .exit-modal-backdrop.open{ display:flex; }
-  .exit-modal-panel{
-    position: relative; background:#fff; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,.45);
-    max-width: 96vw; max-height: 92vh; overflow:auto;
-  }
-  .exit-modal-panel img{ display:block; max-width:100%; height:auto }
-  .exit-modal-close{
-    position:absolute; top:8px; right:8px; width:36px; height:36px; line-height:32px;
-    border-radius:999px; border:2px solid var(--link); background:#fff; color:var(--link);
-    font-weight:800; text-align:center; cursor:pointer;
-  }
-  @media print{ .exit-modal-backdrop{ display:none !important; } }
-
-
-  /* Exit Ticket: show image at half size */
-  .exit-modal-panel img{
-    max-width: 50% !important;
-    height: auto !important;
-    display: block;
+  /* QR code size increased (max-width: 500px) and centered in its card. */
+  .qr{
+    height:auto !important;
+    width:317px !important;
+    max-width:317px !important;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--surface);
+    padding:10px;
+    display:block;
     margin: 0 auto;
   }
 
+  /* Utilities row */
+  .utils{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin:8px 0}
+  .btn{border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:8px 12px;border-radius:10px;cursor:pointer}
+  .btn:hover{border-color:var(--blue);box-shadow:0 0 0 3px rgba(1,33,105,.12);color:var(--blue)}
+  .btn:focus{outline:2px solid rgba(1,33,105,.35);outline-offset:2px}
+
+  /* Status */
+  .status{font-size:14px;color:var(--muted)}
+
+  footer{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    background:var(--blue);
+    color:#FFF;
+    text-align:center;
+    padding:8px 12px;
+    pointer-events:none
+  }
+
+  @media print{
+    @page{size:A4;margin:12mm}
+    header,footer,.tabs,.utils{display:none}
+    main{padding-bottom:0}
+  }
+</style>
+<style id="uk-flag-strong">
+  body.uk-flag{ background: var(--paper); }
+  header.uk-flag{
+    background: var(--blue) !important;
+    color: #fff !important;
+    border-bottom: 4px solid var(--red) !important;
+  }
+  header.uk-flag a{ color:#fff !important; }
+  header.uk-flag a:hover{ color: var(--red) !important; text-decoration: underline; }
+  .btn.primary{ background: var(--blue); color:#fff; border-color: var(--blue); }
+  .btn.primary:hover{ background: #0f2d7a; border-color:#0f2d7a; }
+</style>
+<style id="credit-white-style">.credit-white{color:#fff !important;}</style>
+<style id="qr-size-override">
+  .qr{ width:317px !important; max-width:317px !important; height:auto !important; }
+</style>
+<style id="qr-card-override">
+  /* Make the QR card span 2 columns where space allows */
+  .grid2 .qr-card{ grid-column: span 2; }
+  /* Center content in the QR card */
+  .grid2 .qr-card h3{ text-align:center; }
+  .grid2 .qr-card a{ display:block; text-align:center; }
+  .grid2 .qr-card img.qr{
+    display:block;
+    margin:12px auto;
+    width:380px !important;
+    max-width:100% !important;
+    height:auto !important;
+  }
+  /* On narrow screens, let it span only 1 column automatically */
+  @media (max-width: 640px){
+    .grid2 .qr-card{ grid-column: auto / auto; }
+  }
+</style>
+<style>
+  /* Pills for Resources quick links */
+  .pillbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .btn.pill{border-radius:9999px;padding:8px 14px}
+</style>
+<style>
+/* Colored pill variants */
+.btn.pill{border-radius:9999px;padding:8px 14px}
+.pillbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+/* tone overrides (border + text color) */
+.btn.pill.tone-blue{border-color:var(--blue);color:var(--blue)}
+.btn.pill.tone-red{border-color:var(--red);color:var(--red)}
+.btn.pill.tone-amber{border-color:var(--amber);color:var(--amber)}
+.btn.pill.tone-teal{border-color:var(--teal);color:var(--teal)}
+.btn.pill.tone-violet{border-color:var(--violet);color:var(--violet)}
+.btn.pill.tone-indigo{border-color:var(--indigo);color:var(--indigo)}
+/* keep color on hover too */
+.btn.pill.tone-blue:hover{border-color:var(--blue);color:var(--blue)}
+.btn.pill.tone-red:hover{border-color:var(--red);color:var(--red)}
+.btn.pill.tone-amber:hover{border-color:var(--amber);color:var(--amber)}
+.btn.pill.tone-teal:hover{border-color:var(--teal);color:var(--teal)}
+.btn.pill.tone-violet:hover{border-color:var(--violet);color:var(--violet)}
+.btn.pill.tone-indigo:hover{border-color:var(--indigo);color:var(--indigo)}
+/* Stack pills on phones */
+@media (max-width: 640px){
+  .pillbar{flex-direction:column}
+  .pillbar .pill{width:100%;text-align:center}
+}
+</style>
+<style>
+    /* Compact header overrides */
+    header .bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px}
+    header .bar > div:first-of-type{display:flex;align-items:center;gap:12px}
+    header .title{font-size:clamp(18px,1.8vw,22px);line-height:1.2;margin:0}
+    header .subtitle{font-size:12px;margin:0}
+    header .logo{height:44px;width:44px;border-radius:50%;margin:0;box-shadow:0 0 0 2px #80002022}
+</style>
+<style>
+/* Header: place logo, title, subtitle in two-column grid */
+header .bar{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 12px;padding:8px 12px}
+header .bar > div:first-of-type{display:contents} /* flatten children into grid */
+header .logo{grid-column:1;grid-row:1 / span 2;height:44px;width:44px;border-radius:50%;box-shadow:0 0 0 2px #80002022}
+header .title{grid-column:2;grid-row:1;font-size:clamp(18px,1.8vw,22px);line-height:1.2;margin:0}
+header .subtitle{grid-column:2;grid-row:2;font-size:12px;margin:0}
+</style>
+<style>
+/* Make collapsible headings match h3 size */
+.summary-discuss{font-size:1.17em;font-weight:700;line-height:1.2;margin:0 0 10px;text-align:center}
 </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>
-        <img src="pdhub-logo.png" alt="PD Hub Logo" class="header-logo">
-        ICT Lesson Planner
-      </h1>
-      <div class="muted tiny">
-        <strong>Gross time:</strong> 45′ · <strong>Net teaching time:</strong> 35–40′ (after settling, transitions, admin).  
-        Keep tech to what helps. Aim for about <strong>20–40%</strong> of class time with devices.
+<body class="uk-flag">
+<header class="uk-flag">
+  <div class="bar">
+    <div>
+      <img alt="Panagiotis Domvros EFL Hub logo" class="logo" src="pdhub-logo.png"/>
+      <div class="title">Bridging the Digital Divide - Teacher Empowerment and the future of the English Teacher in the age of AI</div>
+      <div class="subtitle">
+        <strong><i><span class="credit-white"><span class="credit-white">Panagiotis Domvros, English and Drama Teacher, All Rights Reserved</span></span></i></strong>
       </div>
-
-      <div class="bar" role="toolbar" aria-label="Actions">
-        <select id="planSelect" class="select" aria-label="Choose preset">
-          <option value="">— Select —</option>
-          <option value="describe">Describing a Person (A2–B1)</option>
-          <option value="slot">Custom (empty slot)</option>
-        </select>
-        <button id="loadBtn" type="button" class="btn">Load</button>
-        <button id="clrBtn" type="button" class="btn">Clear</button>
-        <button id="prtBtn" type="button" class="btn">Print</button>
-        <span id="status" class="status" aria-live="polite"></span>
-      </div>
-    </header>
-
-    <section class="card print-hide">
-      <details>
-        <summary>What does “just enough” mean? The Goldilocks Tech Rule</summary>
-        <ul class="tiny">
-          <li>Use a tool only if it makes learning easier or clearer.</li>
-          <li>Start fast: students using it in under 2 minutes.</li>
-          <li>Everyone can join (shared tablets ok). Always have a paper fallback.</li>
-        </ul>
-        <a href="https://domvrosepimorfosi.github.io/techcheck-rubric/" class="btn" target="_blank" rel="noopener" style="margin-top: 8px; text-decoration: none; display: inline-block;">My Tech Check  Rubric</a>
-      </details>
-      <div style="margin-top:10px; display:flex; gap:10px; align-items:center">
-        <div style="flex:1">
-          <div class="meter" aria-label="Screen-time gauge"><div class="fill" id="fill"></div></div>
-        </div>
-        <div id="meterTag" class="pill low">0% device time</div>
-      </div>
-      <div class="tiny muted">Green (good) ≈ 20–40%. The gauge updates when you add minutes and tick “Devices?”.</div>
-    </section>
-
-    <section class="card">
-      <div class="grid grid-3">
-        <div>
-          <label for="title">Lesson title</label>
-          <input id="title" type="text" placeholder="e.g., Describing a Person">
-        </div>
-        <div>
-          <label for="level">CEFR / Age</label>
-          <input id="level" type="text" placeholder="e.g., A2–B1 / 12–14">
-        </div>
-        <div>
-          <label for="total">Total minutes</label>
-          <input id="total" type="number" min="10" step="5" placeholder="45">
-        </div>
-      </div>
-      <div class="grid grid-2" style="margin-top:8px">
-        <div>
-          <label for="aims">Aims (keep it short)</label>
-          <textarea id="aims" placeholder="Students can … (2 items max)"></textarea>
-        </div>
-        <div>
-          <label for="evidence">What will you collect?</label>
-          <textarea id="evidence" placeholder="e.g., 1 short audio OR exit ticket"></textarea>
-        </div>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2 style="margin:0 0 6px">Steps (each with a paper Plan B)</h2>
-      <table id="tbl">
-        <thead>
-          <tr>
-            <th style="width:11ch">Step</th>
-            <th class="col-min">Minutes</th>
-            <th>What students do</th>
-            <th class="col-dev">Devices?</th>
-            <th>How (link/code/instruction)</th>
-            <th>Plan B (no devices)</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="6" id="totals" class="tiny muted">Total: 0 min · With devices: 0 min · 0%</td>
-          </tr>
-        </tfoot>
-      </table>
-      <div style="margin-top:8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
-        <button id="addBtn" type="button" class="btn">+ Add step</button>
-        <div class="tiny muted print-hide">Tip: short steps keep energy high. If setup takes long, simplify.</div>
-      </div>
-    </section>
-
-    <section class="card print-hide">
-      <h2 style="margin:0 0 6px">Quick checks</h2>
-      <div class="checklist tiny">
-        <label><input type="checkbox"> Students can start quickly</label>
-        <label><input type="checkbox"> Captions / readable fonts</label>
-        <label><input type="checkbox"> Shared tablets are fine</label>
-        <label><input type="checkbox"> Paper copies ready</label>
-      </div>
-    </section>
-
-    <p class="tiny muted print-hide">You can copy, adapt, and share this template with your classmates.</p>
-
-    <footer class="print-hide">
-      ✨✍️ Created by Panagiotis Domvros, English and Drama Teacher, All Rights Reserved ✍️✨
-    </footer>
-  </div>
-
-<script>
-(function(){
-  const tbody   = document.querySelector('#tbl tbody');
-  const totals  = document.getElementById('totals');
-  const fill    = document.getElementById('fill');
-  const tag     = document.getElementById('meterTag');
-  const totalInput = document.getElementById('total');
-  const statusEl = document.getElementById('status');
-  const planSelect = document.getElementById('planSelect');
-
-  /* ---- URL helpers ---- */
-  function extractUrls(text){
-    if(!text) return [];
-    const found = text.match(/https?:\/\/[^\s)]+|www\.[^\s)]+/g) || [];
-    return found.map(u => u.trim());
-  }
-
-  /* Render preset links + any URLs typed in the textarea */
-  function renderLinks(tr){
-    const ta = tr.querySelector('.r-how');
-    const box = tr.querySelector('.how-links');
-    if(!box) return;
-
-    let base = [];
-    try { base = JSON.parse(box.dataset.baseLinks || '[]'); } catch(e){ base = []; }
-
-    const typed = extractUrls(ta ? ta.value : '');
-    const all = [...base, ...typed].filter(Boolean);
-
-    const seen = new Set();
-    const anchors = all.map(u=>{
-      const href = /^https?:\/\//i.test(u) ? u : 'https://' + u;
-      if(seen.has(href)) return null;
-      seen.add(href);
-      return `<a href="${href}" target="_blank" rel="noopener">${u}</a>`;
-    }).filter(Boolean);
-
-    box.innerHTML = anchors.join('<br>');
-  }
-
-  /* ---- Textarea auto-grow ---- */
-  function autoGrow(el){
-    if(!el) return;
-    el.style.height = 'auto';
-    el.style.height = (el.scrollHeight) + 'px';
-  }
-  function wireAutoGrow(root=document){
-    root.querySelectorAll('textarea').forEach(t => {
-      autoGrow(t);
-      t.addEventListener('input', () => autoGrow(t));
-    });
-  }
-  function autoGrowRow(tr){ tr.querySelectorAll('textarea').forEach(autoGrow); }
-
-  /* ---- Row builder ---- */
-  function row(data){
-    const d = Object.assign({step:'', min:'', do:'', tech:false, how:'', plan:'', links:[]}, data||{});
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><input type="text"   class="r-step" value="${d.step}" placeholder="e.g., Lead-in"></td>
-      <td class="col-min"><input type="number" class="r-min"  value="${d.min}" min="0" step="1" placeholder="5"></td>
-      <td><textarea class="r-do"   placeholder="What learners do">${d.do}</textarea></td>
-      <td style="text-align:center" class="col-dev"><input type="checkbox" class="r-tech" ${d.tech?'checked':''}></td>
-      <td>
-        <textarea class="r-how"  placeholder="Link / code / instruction">${d.how}</textarea>
-        <div class="how-links tiny" ${d.links && d.links.length ? `data-base-links='${JSON.stringify(d.links).replace(/'/g,"&apos;")}'` : ''}></div>
-      </td>
-      <td><textarea class="r-plan" placeholder="Analog fallback with same aim">${d.plan}</textarea></td>`;
-    tr.addEventListener('input', ()=>{ update(); renderLinks(tr); autoGrowRow(tr); });
-    tr.addEventListener('change', ()=>{ update(); renderLinks(tr); autoGrowRow(tr); });
-    renderLinks(tr);
-    autoGrowRow(tr);
-    return tr;
-  }
-
-  function add(){ const tr = row(); tbody.appendChild(tr); update(); wireAutoGrow(tr); }
-
-  function compute(){
-    let total=0, tech=0; const rows=[...tbody.querySelectorAll('tr')];
-    rows.forEach(r=>{
-      const m = Number(r.querySelector('.r-min').value)||0;
-      const t = r.querySelector('.r-tech').checked;
-      total += m; if(t) tech += m;
-    });
-    const declared = Number(totalInput.value)||total||0;
-    const denom = declared>0?declared: (total||1);
-    const pct = Math.round((tech/denom)*100);
-    return {total, tech, declared, pct};
-  }
-
-  function update(){
-    const {total, tech, declared, pct} = compute();
-    totals.textContent = `Total: ${total} min · With devices: ${tech} min · ${isFinite(pct)?pct:0}%`;
-    if (fill){ fill.style.width = Math.max(0, Math.min(100, pct))+"%"; }
-    if (tag){
-      tag.textContent = `${isFinite(pct)?pct:0}% device time`;
-      tag.className = 'pill ' + (pct>=20 && pct<=40 ? 'ok' : pct<20 ? 'low' : 'high');
-    }
-  }
-
-  /* ---- Clear: empties everything and leaves one blank row ---- */
-  function clearAll(){
-    document.querySelectorAll('input[type=text], input[type=number], textarea')
-      .forEach(el => { el.value = ''; autoGrow(el); });
-    document.querySelectorAll('.checklist input[type=checkbox]').forEach(ch=>ch.checked=false);
-    tbody.innerHTML='';
-    const tr = row(); tbody.appendChild(tr);
-    wireAutoGrow(tr);
-    update();
-    status('Cleared.');
-  }
-
-  /* ---- Preset plans ---- */
-  const plans = {
-    slot: { meta: { title:'', level:'', total:'', aims:'', evidence:'' }, steps: [] },
-    describe: {
-      meta: {
-        title: 'Describing a Person: From Notes to a Vivid Paragraph',
-        level: 'A2–B1 / 12–14',
-        total: 45, /* gross 45′; steps ≈ 36′ net incl. analog exit ticket */
-        aims: '• Understand a short model description and identify better adjectives.\n• Recycle key descriptors via a short cloze.\n• Plan a description using the “3 Writing Tips” handout (no full draft in class).',
-        evidence: 'Completed handout outline + 5-item paper exit ticket (better adjective • stronger hook • one adjective used • improved sentence • self-rate 1–5).'
-      },
-      steps: [
-        {
-          step:'Lead-in', min:6, tech:false,
-          do:'Brainstorm appearance & character adjectives from a photo; build a 2-column word bank.',
-          how:'Project the “Meet Colin!” board; students call out adjectives and you click to place them (no tablets).',
-          links:['https://domvrosepimorfosi.github.io/MeetColin/'],
-          plan:'Printed photo; students suggest adjectives; teacher lists on board.'
-        },
-        {step:'Input: model text', min:6, tech:true, do:'Read a model description (Eva about Olga). Answer 2 quick checks.',
-         how:'Google Form', links:['https://forms.gle/jbhRq7ji5YyGQG8N7'],
-         plan:'Teacher reads aloud; students answer orally; teacher notes answers.'},
-        {step:'Guided practice', min:6, tech:true, do:'Do a 7-item cloze to recycle descriptors (hair, eyes, smile, slim, etc.).',
-         how:'Wordwall Cloze', links:['https://wordwall.net/resource/101027703'],
-         plan:'Printed cloze; pair check; project answers.'},
-        {step:'Plan outline', min:13, tech:false, do:'Describing a Person — 3 Writing Tips Handout',
-         how:'Project the Handout', links:['https://domvrosepimorfosi.github.io/writinghandout-b1/'],
-         plan:'Printed handout copies; students complete on paper.'},
-        {step:'Exit ticket', min:5, tech:false, do:'5-item paper exit ticket: better adjective; stronger hook; one adjective used; improved sentence; self-rate 1–5.',
-         how:'Project handout', plan:'Collect slips at the door; sort for next lesson.'}
-      ]
-    }
-  };
-
-  function loadPlan(key){
-    const plan = plans[key];
-    if(!plan){ status('Choose a preset first.'); return; }
-
-    // meta
-    document.getElementById('title').value    = plan.meta.title || '';
-    document.getElementById('level').value    = plan.meta.level || '';
-    document.getElementById('total').value    = plan.meta.total || '';
-    document.getElementById('aims').value     = plan.meta.aims || '';
-    document.getElementById('evidence').value = plan.meta.evidence || '';
-    ['aims','evidence'].forEach(id => autoGrow(document.getElementById(id)));
-
-    // steps
-    tbody.innerHTML='';
-    if (plan.steps && plan.steps.length){
-      plan.steps.forEach(s=>{
-        const tr = row({
-          step:s.step, min:s.min, do:s.do, tech:!!s.tech,
-          how:s.how||'', plan:s.plan||'', links:s.links||[]
-        });
-        tbody.appendChild(tr);
-        renderLinks(tr);  // preset + typed URLs
-        autoGrowRow(tr);  // show full content
-      });
-      status('Preset loaded.');
-    } else {
-      const tr = row(); tbody.appendChild(tr);
-      status('Empty preset loaded.');
-    }
-
-    wireAutoGrow(tbody);
-    update();
-
-    // Reset dropdown to blank after loading
-    planSelect.value = '';
-  }
-
-  function status(msg){
-    const el = statusEl; if(!el) return;
-    el.textContent = msg || '';
-    if(msg){ setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2500); }
-  }
-
-  /* ---- INIT ---- */
-  clearAll(); // page loads empty
-
-  document.getElementById('addBtn').addEventListener('click', add);
-  document.getElementById('clrBtn').addEventListener('click', clearAll);
-  document.getElementById('prtBtn').addEventListener('click', ()=>window.print());
-
-  // Dropdown + Load button
-  document.getElementById('loadBtn').addEventListener('click', ()=>{
-    const key = planSelect.value;
-    if(!key){ status('Choose a preset first.'); return; }
-    loadPlan(key);
-  });
-})();
-</script>
-
-<script>
-/* Exit Ticket injector (lazy lookup, non-invasive) */
-(function(){
-  function getModal(){ return document.getElementById('exitTicketModal'); }
-  function getModalImg(){ return document.getElementById('exitTicketImg'); }
-  function getCloseBtn(){ const m=getModal(); return m ? m.querySelector('.exit-modal-close') : null; }
-
-  function openExitTicket(){
-    const modal = getModal();
-    const img = getModalImg();
-    if(!modal) return;
-    if(img){ img.src = 'Exit%20Ticket%201.png'; }
-    modal.classList.add('open');
-    modal.removeAttribute('aria-hidden');
-    const closeBtn = getCloseBtn();
-    if(closeBtn) closeBtn.focus();
-  }
-  function closeExitTicket(){
-    const modal = getModal();
-    if(!modal) return;
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden','true');
-  }
-  // Close wiring (rebound on DOM changes)
-  function wireModalClose(){
-    const modal = getModal();
-    const closeBtn = getCloseBtn();
-    if(modal){
-      modal.addEventListener('click', (e)=>{ if(e.target === modal) closeExitTicket(); });
-    }
-    if(closeBtn){ closeBtn.addEventListener('click', closeExitTicket); }
-    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeExitTicket(); });
-  }
-
-  function injectExitButtonIntoRow(tr){
-    if(!tr) return;
-    const stepEl = tr.querySelector('.r-step');
-    if(!stepEl) return;
-    const step = (stepEl.value || '').trim().toLowerCase();
-    if(step !== 'exit ticket') return;
-
-    const linksBox = tr.querySelector('.how-links');
-    if(!linksBox) return;
-
-    if(linksBox.querySelector('.open-exit-ticket')) return; // already added
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'btn open-exit-ticket';
-    btn.style.marginTop = '6px';
-    btn.textContent = 'Open “Exit Ticket”';
-    btn.addEventListener('click', openExitTicket);
-    linksBox.prepend(btn);
-  }
-
-  function scanAllRows(){
-    document.querySelectorAll('#tbl tbody tr').forEach(injectExitButtonIntoRow);
-    wireModalClose();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', scanAllRows);
-  }else{
-    scanAllRows();
-  }
-
-  const tbody = document.querySelector('#tbl tbody');
-  if(tbody && 'MutationObserver' in window){
-    const mo = new MutationObserver(scanAllRows);
-    mo.observe(tbody, { childList:true, subtree:true });
-  }
-})();
-</script>
-
-
-
-  <!-- Exit Ticket pop-up -->
-  <div id="exitTicketModal" class="exit-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="exit-modal-panel">
-      <button type="button" class="exit-modal-close" aria-label="Close">×</button>
-      <img id="exitTicketImg" src="" alt="Exit Ticket 1">
     </div>
   </div>
+</header>
 
-</body></html>
+<nav aria-label="Seminar sections" class="tabs" role="tablist">
+  <button aria-controls="panel-home" aria-selected="true" class="tab" data-color="home" id="tab-home" role="tab">Home</button>
+  <button aria-controls="panel-beyond" aria-selected="false" class="tab" data-color="c6" id="tab-beyond" role="tab">Beyond the &#39;Fun&#39; Factor</button>
+  <button aria-controls="panel-c3" aria-selected="false" class="tab" data-color="c3" id="tab-c3" role="tab">ICT Lesson Planner</button>
+  <button aria-controls="panel-goldilocks" aria-selected="false" class="tab" data-color="c2" id="tab-goldilocks" role="tab">Goldilocks Tech Rule</button>
+  <!-- From Chalkboards moved BEFORE SAMR -->
+  <button aria-controls="panel-c5" aria-selected="false" class="tab" data-color="c5" id="tab-c5" role="tab">From Chalkboards to Chatbots</button>
+  <button aria-controls="panel-c4" aria-selected="false" class="tab" data-color="c4" id="tab-c4" role="tab">SAMR Analysis</button>
+  <button aria-controls="panel-samr-applying" aria-selected="false" class="tab" data-color="c4" id="tab-samr-applying" role="tab">Applying the SAMR Model</button>
+  <button aria-controls="panel-c6" aria-selected="false" class="tab" data-color="c5" id="tab-c6" role="tab">From Rote to Reality</button>
+  <button aria-controls="panel-resources" aria-selected="false" class="tab" data-color="c2" id="tab-resources" role="tab">Resources</button>
+  <!-- AI Literacy moved AFTER Resources -->
+  <button aria-controls="panel-ailiteracy" aria-selected="false" class="tab" data-color="c2" id="tab-ailiteracy" role="tab">AI Literacy</button>
+  <button aria-controls="panel-magicschool" aria-selected="false" class="tab" data-color="c6" id="tab-magicschool" role="tab">Using MagicSchool</button>
+  <button aria-controls="panel-tech" aria-selected="false" class="tab" data-color="c3" id="tab-tech" role="tab">Tech Integration</button>
+  <button aria-controls="panel-goblin" aria-selected="false" class="tab" data-color="c5" id="tab-goblin" role="tab">Goblin Tools</button>
+  <button aria-controls="panel-zen" aria-selected="false" class="tab" data-color="c1" id="tab-zen" role="tab">Classroom Zen</button>
+  <!-- NEW TAB -->
+  <button aria-controls="panel-bethebot" aria-selected="false" class="tab" data-color="c3" id="tab-bethebot" role="tab">Be the Bot</button>
+  <!-- END NEW TABS -->
+  <button aria-controls="panel-bibliography" aria-selected="false" class="tab" data-color="c1" id="tab-bibliography" role="tab">Select Bibliography</button>
+</nav>
+
+<main>
+  <section aria-labelledby="tab-home" class="panel active" id="panel-home" role="tabpanel">
+    <details class="card" style="margin-bottom:12px">
+      <summary class="summary-discuss">The Teacher Make-up</summary>
+      <figure style="margin:0">
+        <a href="https://domvrosepimorfosi.github.io/teachermakeup/?lng=en" rel="noopener" target="_blank" title="Open Teacher Make-Up (English)">
+          <img alt="QR code: Teacher Make-Up" class="qr" src="teacher%20make%20up.png" style="width:380px !important; max-width:100% !important; height:auto !important; display:block; margin:12px auto"/>
+        </a>
+      </figure>
+    </details>
+
+    <div class="grid2">
+      <details class="card qr-card" style="margin-bottom:12px">
+        <summary class="summary-discuss">Let&#39;s do a little survey</summary>
+        <a href="https://answergarden.ch/5081475" rel="noopener" target="_blank" title="Open AnswerGarden survey">
+          <img alt="QR code: AnswerGarden survey" class="qr" src="answer garden.png" style="width:380px !important; max-width:100% !important; height:auto !important; display:block; margin:12px auto"/>
+        </a>
+      </details>
+    </div>
+
+    <details class="card" style="margin-bottom:12px">
+      <summary class="summary-discuss">Seminar Material</summary>
+      <figure style="margin:0">
+        <a href="https://domvrosepimorfosi.github.io/bdd-dissemination/" rel="noopener" target="_blank" title="Open seminar material">
+          <img alt="Seminar material QR code" src="dissemination qr code.png" style="width:50%;height:auto;border:1px solid var(--border);border-radius:12px;display:block;margin:auto"/>
+        </a>
+      </figure>
+    </details>
+  </section>
+
+  <section aria-labelledby="tab-beyond" class="panel" id="panel-beyond" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/Gamification-EFL-Value/" style="width:100%;height:1200px;border:0" title="Beyond the &#39;Fun&#39; Factor"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-c3" class="panel" id="panel-c3" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe id="frame-c3" src="https://domvrosepimorfosi.github.io/ICT-LessonPlanner/" style="width:100%;height:1200px;border:0" title="ICT Lesson Planner"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-goldilocks" class="panel" id="panel-goldilocks" role="tabpanel">
+    <div class="card" style="padding:0">
+      <video controls style="width:50%;max-width:640px;height:auto;display:block;border-radius:16px;margin:0 auto">
+        <source src="The Goldilocks Tech Rule.mp4" type="video/mp4"/>
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </section>
+
+  <!-- From Chalkboards panel moved BEFORE SAMR -->
+  <section aria-labelledby="tab-c5" class="panel" id="panel-c5" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/Chalkboards-to-Chatbots/" style="width:100%;height:1200px;border:0" title="From Chalkboards to Chatbots"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-c4" class="panel" id="panel-c4" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe id="frame-c4" src="https://domvrosepimorfosi.github.io/SAMR-analysis-sonnet130/" style="width:100%;height:1200px;border:0" title="SAMR Analysis"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-samr-applying" class="panel" id="panel-samr-applying" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe id="frame-samr-applying" src="https://domvrosepimorfosi.github.io/SAMR-tenses/"
+              style="width:100%;height:1200px;border:0" title="Applying the SAMR Model"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-c6" class="panel" id="panel-c6" role="tabpanel">
+    <div class="card" style="padding:0">
+      <h4>From Rote to Reality: AI as a Facilitator in EFL Teaching</h4>
+      <iframe src="https://domvrosepimorfosi.github.io/Rote-to-Reality/" style="width:100%;height:1000px;border:0" title="From Rote to Reality"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-resources" class="panel" id="panel-resources" role="tabpanel">
+    <div class="card">
+      <h3>Resources</h3>
+      <div class="pillbar">
+        <a class="btn pill tone-violet" href="https://domvrosepimorfosi.github.io/using-storybook/" rel="noopener" target="_blank">Using Gemini Storybook</a>
+        <a class="btn pill tone-teal" href="https://domvrosepimorfosi.github.io/ict-tools-categorised/" rel="noopener" target="_blank">Tools by Category &amp; Level</a>
+        <a class="btn pill tone-indigo" href="https://domvrosepimorfosi.github.io/EFL-tools/" rel="noopener" target="_blank">EFL Tools - A Suggested List</a>
+        <a class="btn pill tone-red" href="https://domvrosepimorfosi.github.io/ict-tools-presentation/" rel="noopener" target="_blank">Guide to Some Basic ICT Tools</a>
+        <a class="btn pill tone-blue" href="https://domvrosepimorfosi.github.io/mizou-chatbot/" rel="noopener" target="_blank">Setting Up A Mizou Chatbot</a>
+        <a class="btn pill tone-amber" href="https://domvrosepimorfosi.github.io/ai-ideation-race/" rel="noopener" target="_blank">AI Ideation Race</a>
+        <a class="btn pill tone-indigo" href="https://domvrosepimorfosi.github.io/sonnet-letmecount/" rel="noopener" target="_blank">Let me count the ways</a>
+      </div>
+      <div class="pillbar">
+        <a class="btn pill tone-red" href="https://domvrosepimorfosi.github.io/AI-classroom-policy/" rel="noopener" target="_blank">AI Classroom Policy - Α Guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Literacy panel moved AFTER Resources -->
+  <section aria-labelledby="tab-ailiteracy" class="panel" id="panel-ailiteracy" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/ai-literacy/" style="width:100%;height:1200px;border:0" title="AI Literacy"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-magicschool" class="panel" id="panel-magicschool" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/using-magicschool/" style="width:100%;height:1200px;border:0" title="Using MagicSchool"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-tech" class="panel" id="panel-tech" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/tech-integration/" style="width:100%;height:1200px;border:0" title="Tech Integration"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-goblin" class="panel" id="panel-goblin" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://goblin.tools/" style="width:100%;height:1200px;border:0" title="Goblin Tools"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-zen" class="panel" id="panel-zen" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://classroomzen.com/" style="width:100%;height:1200px;border:0" title="Classroom Zen"></iframe>
+    </div>
+  </section>
+
+  <!-- Be the Bot panel (unchanged position relative to its tab) -->
+  <section aria-labelledby="tab-bethebot" class="panel" id="panel-bethebot" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/be-the-bot/" style="width:100%;height:1200px;border:0" title="Be the Bot"></iframe>
+    </div>
+  </section>
+
+  <section aria-labelledby="tab-bibliography" class="panel" id="panel-bibliography" role="tabpanel">
+    <div class="card" style="padding:0">
+      <iframe src="https://domvrosepimorfosi.github.io/bridging-divide-bibliography/" style="width:100%;height:1200px;border:0" title="Select Bibliography"></iframe>
+    </div>
+  </section>
+</main>
+
+<footer>
+  ✨✍️ Created by <span class="credit-white"><span class="credit-white">Panagiotis Domvros, English and Drama Teacher, All Rights Reserved</span></span> ✍️✨
+</footer>
+
+<script>
+  // Tabs
+  const tabs=[...document.querySelectorAll('.tab[role="tab"]')];
+  const panels=[...document.querySelectorAll('.panel')];
+
+  function activate(id){
+    tabs.forEach(t=>t.setAttribute('aria-selected', t.id===`tab-${id}`?'true':'false'));
+    panels.forEach(p=>p.classList.toggle('active', p.id===`panel-${id}`));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  tabs.forEach(t=>t.addEventListener('click',()=>activate(t.id.replace('tab-',''))));
+  document.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>activate(btn.getAttribute('data-jump').replace('#panel-',''))));
+
+  // Print current tab (print iframe if present) — guard in case button is not present
+  const printBtn = document.getElementById('printCurrent');
+  if(printBtn){
+    printBtn.addEventListener('click',()=>{
+      const active=document.querySelector('.panel.active');
+      const iframe=active?active.querySelector('iframe'):null;
+      if(iframe && iframe.contentWindow){
+        try{
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          return;
+        }catch(e){}
+      }
+      window.print();
+    });
+  }
+</script>
+</body>
+</html>
